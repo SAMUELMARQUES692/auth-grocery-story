@@ -14,6 +14,6 @@ public record UserRequest(
         String email,
 
         @NotBlank(message = "O Campo senha é obrigatório")
-        @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
+        @Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres")
         String password
 ) {}

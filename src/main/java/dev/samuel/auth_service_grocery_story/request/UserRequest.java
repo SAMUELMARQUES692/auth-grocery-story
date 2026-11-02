@@ -10,7 +10,7 @@ public record UserRequest(
 
 
         @NotBlank(message = "O Campo e-mail é obrigatório")
-        @Email
+        @Email(message = "Email deve ter letras minúsculas")
         String email,
 
         @NotBlank(message = "O Campo senha é obrigatório")

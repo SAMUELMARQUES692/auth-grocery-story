@@ -21,7 +21,7 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
 
     @Value("${security.jwt.expiration}")
-    private long expiresInSeconds;;
+    private long expiresInSeconds;
 
     public String gerarToken(User user) {
         Instant now = Instant.now();

@@ -3,13 +3,12 @@ package dev.samuel.auth_service_grocery_story.configuration;
 import dev.samuel.auth_service_grocery_story.entity.Scope;
 import dev.samuel.auth_service_grocery_story.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
-import org.springframework.security.oauth2.jwt.JwsHeader;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
+import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
@@ -39,6 +38,13 @@ public class TokenService {
                 JwsHeader.with(SignatureAlgorithm.RS256).build(),
                 claimsSet
         )).getTokenValue();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(RSAPublicKey rsaPublicKey) {
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
+        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer("auth-service-grocery"));
+        return decoder;
     }
 
 }

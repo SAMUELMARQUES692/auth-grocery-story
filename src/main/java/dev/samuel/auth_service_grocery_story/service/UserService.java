@@ -30,10 +30,13 @@ public class UserService {
             throw new EmailJaCadastradoException(request.email());
         }
 
+        String email = request.email().trim().toLowerCase();
+
         Scope scopeUser = scopeService.findByName("USER");
 
         User newUser = userMapper.toEntity(request);
         newUser.setScopes(List.of(scopeUser));
+        newUser.setEmail(email);
         newUser.setPassword(passwordEncoder.encode(request.password()));
         User save = userRepository.save(newUser);
         return userMapper.toUserResponse(save);

@@ -23,7 +23,7 @@ public class LoginService {
     public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.email())
                 .filter(u -> passwordEncoder.matches(request.password(), u.getPassword()))
-                .orElseThrow(() -> new UserOrPasswordIncorrectException(request.email(), request.password()));
+                .orElseThrow(() -> new UserOrPasswordIncorrectException());
 
         String token = tokenService.gerarToken(user);
 

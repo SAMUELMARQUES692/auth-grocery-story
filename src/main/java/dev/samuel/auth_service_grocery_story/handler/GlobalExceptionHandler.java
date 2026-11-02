@@ -2,6 +2,7 @@ package dev.samuel.auth_service_grocery_story.handler;
 
 import dev.samuel.auth_service_grocery_story.exception.RecursoNaoEncontradoException;
 import dev.samuel.auth_service_grocery_story.exception.RegraNegocioException;
+import dev.samuel.auth_service_grocery_story.exception.SemAutorizacaoException;
 import dev.samuel.auth_service_grocery_story.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RegraNegocioException.class)
     public ResponseEntity<ErrorResponse> regraNegocio(RegraNegocioException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(ex.getCodigo(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(SemAutorizacaoException.class)
+    public ResponseEntity<ErrorResponse> semAutorizacao(SemAutorizacaoException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(ex.getCodigo(), ex.getMessage()));
     }
 

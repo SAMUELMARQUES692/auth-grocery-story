@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
 
     @Value("${security.jwt.expiration}")
-    private Instant expiresInSeconds;
+    private long expiresInSeconds;;
 
     public String gerarToken(User user) {
         Instant now = Instant.now();
@@ -34,7 +33,7 @@ public class TokenService {
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
                 .issuer("auth-service-grocery")
                 .issuedAt(now)
-                .expiresAt(expiresInSeconds)
+                .expiresAt(now.plusSeconds(expiresInSeconds))
                 .subject(user.getEmail())
                 .claim("scope", scopesStr)
                 .build();

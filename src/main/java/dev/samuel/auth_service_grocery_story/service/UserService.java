@@ -26,11 +26,11 @@ public class UserService {
     @Transactional
     public UserResponse createUser(UserRequest request) {
 
-        if (userRepository.existsByEmail(request.email())) {
-            throw new EmailJaCadastradoException(request.email());
-        }
-
         String email = request.email().trim().toLowerCase();
+
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailJaCadastradoException(email);
+        }
 
         Scope scopeUser = scopeService.findByName("USER");
 

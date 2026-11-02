@@ -1,6 +1,5 @@
 package dev.samuel.auth_service_grocery_story.service;
 
-import dev.samuel.auth_service_grocery_story.configuration.TokenService;
 import dev.samuel.auth_service_grocery_story.entity.User;
 import dev.samuel.auth_service_grocery_story.exception.UserOrPasswordIncorrectException;
 import dev.samuel.auth_service_grocery_story.repository.UserRepository;
@@ -21,7 +20,8 @@ public class LoginService {
     private static final long EXPIRES_IN_SECONDS = 3600L;
 
     public LoginResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.email())
+
+        User user = userRepository.findByEmail(request.email().trim().toLowerCase())
                 .filter(u -> passwordEncoder.matches(request.password(), u.getPassword()))
                 .orElseThrow(() -> new UserOrPasswordIncorrectException());
 

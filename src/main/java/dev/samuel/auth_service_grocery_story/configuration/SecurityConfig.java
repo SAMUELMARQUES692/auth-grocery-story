@@ -16,10 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -58,7 +55,9 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder(RSAPublicKey rsaPublicKey) {
-        return NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
+        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer("auth-service-grocery"));
+        return decoder;
     }
 
     @Bean

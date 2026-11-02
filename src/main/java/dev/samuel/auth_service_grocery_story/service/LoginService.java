@@ -6,6 +6,7 @@ import dev.samuel.auth_service_grocery_story.repository.UserRepository;
 import dev.samuel.auth_service_grocery_story.request.LoginRequest;
 import dev.samuel.auth_service_grocery_story.response.LoginResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    private static final long EXPIRES_IN_SECONDS = 3600L;
+    @Value("${security.jwt.expiration}")
+    private long expiresInSeconds;
 
     public LoginResponse login(LoginRequest request) {
 
@@ -30,12 +32,7 @@ public class LoginService {
         return LoginResponse.builder()
                 .accessToken(token)
                 .tokenType("Bearer")
-                .expiresIn(EXPIRES_IN_SECONDS)
+                .expiresIn(expiresInSeconds)
                 .build();
     }
-
-    private boolean isPasswordCorrect(String password, String savePassword) {
-        return passwordEncoder.matches(password, savePassword);
-    }
-
 }

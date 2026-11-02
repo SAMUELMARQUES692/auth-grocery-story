@@ -3,6 +3,7 @@ package dev.samuel.auth_service_grocery_story.service;
 import dev.samuel.auth_service_grocery_story.entity.Scope;
 import dev.samuel.auth_service_grocery_story.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -20,6 +21,9 @@ public class TokenService {
 
     private final JwtEncoder jwtEncoder;
 
+    @Value("${security.jwt.expiration}")
+    private Instant expiresInSeconds;
+
     public String gerarToken(User user) {
         Instant now = Instant.now();
 
@@ -30,7 +34,7 @@ public class TokenService {
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
                 .issuer("auth-service-grocery")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(expiresInSeconds)
                 .subject(user.getEmail())
                 .claim("scope", scopesStr)
                 .build();

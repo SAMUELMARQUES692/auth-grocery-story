@@ -20,9 +20,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest request) {
-        UserResponse response = userService.createUser(request);
+    @PostMapping("/funcionario")
+    public ResponseEntity<UserResponse> createUserEmployee(@RequestBody @Valid UserRequest request) {
+        UserResponse response = userService.createUserEmployee(request);
+        URI location = URI.create("api/users/" + response.id());
+        return ResponseEntity.created(location).body(response);
+    }
+
+    @PostMapping("/cliente")
+    public ResponseEntity<UserResponse> createUserClient(@RequestBody @Valid UserRequest request) {
+        UserResponse response = userService.createUserClient(request);
         URI location = URI.create("api/users/" + response.id());
         return ResponseEntity.created(location).body(response);
     }

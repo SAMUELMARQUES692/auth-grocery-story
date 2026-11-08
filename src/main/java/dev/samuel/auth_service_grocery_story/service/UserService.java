@@ -24,7 +24,7 @@ public class UserService {
     private final ScopeService scopeService;
 
     @Transactional
-    public UserResponse createUser(UserRequest request) {
+    public UserResponse createUserEmployee(UserRequest request) {
 
         String email = request.email().trim().toLowerCase();
 
@@ -41,4 +41,25 @@ public class UserService {
         User save = userRepository.save(newUser);
         return userMapper.toUserResponse(save);
     }
+
+    @Transactional
+    public UserResponse createUserClient(UserRequest request) {
+
+        String email = request.email().trim().toLowerCase();
+
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailJaCadastradoException(email);
+        }
+
+        Scope scopeUser = scopeService.findByName("CLIENTE");
+
+        User newUser = userMapper.toEntity(request);
+        newUser.setScopes(List.of(scopeUser));
+        newUser.setEmail(email);
+        newUser.setPassword(passwordEncoder.encode(request.password()));
+        User save = userRepository.save(newUser);
+        return userMapper.toUserResponse(save);
+    }
+
+
 }

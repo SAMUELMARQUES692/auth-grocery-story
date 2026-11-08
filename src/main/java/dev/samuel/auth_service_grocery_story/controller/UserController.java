@@ -23,14 +23,14 @@ public class UserController {
     @PostMapping("/funcionario")
     public ResponseEntity<UserResponse> createUserEmployee(@RequestBody @Valid UserRequest request) {
         UserResponse response = userService.createUserEmployee(request);
-        URI location = URI.create("api/users/" + response.id());
+        URI location = URI.create("api/users/funcionario/" + response.id());
         return ResponseEntity.created(location).body(response);
     }
 
     @PostMapping("/cliente")
     public ResponseEntity<UserResponse> createUserClient(@RequestBody @Valid UserRequest request) {
         UserResponse response = userService.createUserClient(request);
-        URI location = URI.create("api/users/" + response.id());
+        URI location = URI.create("api/users/cliente/" + response.id());
         return ResponseEntity.created(location).body(response);
     }
 
